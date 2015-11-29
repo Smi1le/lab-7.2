@@ -7,26 +7,33 @@ using namespace std;
 using namespace sf;
 
 void determinationReduction(pieces * figures) {
-	figures->reductionFactor = (1 - (RESIZING_PIECES.x / STANDARD_SIZE_PIECES.x)) / (figures->firstPieces->getPosition().x / HORIZONTAL_SPEED.x);
+	figures->itPieces = figures->listPieces.begin();
+	list<RectangleShape*>::iterator it = figures->itPieces;
+	figures->reductionFactor = (1 - (RESIZING_PIECES.x / STANDARD_SIZE_PIECES.x)) / ((*it)->getPosition().x / HORIZONTAL_SPEED.x);
 	figures->determineReductionFactor = false;
 }
 
 void delaysDefinitionHorizAccel(pieces * figures) {
-	figures->accelerationDiagonally = { (float(SIZE_WINDOW.x) - 100.0f - LEFT_BOUNDARY) / (float(SIZE_WINDOW.y) - LEFT_BOUNDARY - (SIZE_WINDOW.y - figures->firstPieces->getPosition().y)), 1.0f };
+	figures->itPieces = figures->listPieces.begin();
+	list<RectangleShape*>::iterator it = figures->itPieces;
+	figures->accelerationDiagonally = { (float(SIZE_WINDOW.x) - 100.0f - LEFT_BOUNDARY) / (float(SIZE_WINDOW.y) - LEFT_BOUNDARY - (SIZE_WINDOW.y - (*it)->getPosition().y)), 1.0f };
 }
 
 void usingBreakpoint(pieces * figures) {
-	figures->breakpoint = { figures->firstPieces->getPosition().x, figures->firstPieces->getPosition().y };
+	figures->itPieces = figures->listPieces.begin();
+	list<RectangleShape*>::iterator it = figures->itPieces;
+	figures->breakpoint = { (*it)->getPosition().x, (*it)->getPosition().y };
 	figures->useBreakpoint = false;
 }
 
 void drawing(RenderWindow &window, pieces *figures) {
 	window.clear(Color::White);
-	window.draw(*figures->firstPieces);
-	window.draw(*figures->secondPieces);
-	window.draw(*figures->thirdPieces);
-	window.draw(*figures->fourthPieces);
-	window.draw(*figures->fifthPieces);
+
+
+	for (figures->itPieces = figures->listPieces.begin(); figures->itPieces != figures->listPieces.end(); figures->itPieces++) {
+		list<RectangleShape*>::iterator it = figures->itPieces;
+		window.draw(**it);
+	}
 	window.display();
 }
 
@@ -72,11 +79,6 @@ void basicCycle(pieces * figures, RenderWindow &window) {
 }
 
 void removal(pieces * figures) {
-	delete figures->firstPieces;
-	delete figures->secondPieces;
-	delete figures->thirdPieces;
-	delete figures->fourthPieces;
-	delete figures->fifthPieces;
 	delete figures->window;
 }
 
@@ -85,7 +87,6 @@ int main()
 	pieces *figures = new pieces;
 	createPieces(figures);
 	RenderWindow & window = *figures->window;
-	figures->distanceBetweenFigures = (figures->secondPieces->getPosition().x - figures->firstPieces->getPosition().x - figures->firstPieces->getSize().x);
 	basicCycle(figures, window);
 	removal(figures);
 	delete figures;

@@ -1,19 +1,16 @@
 #pragma once
 #include "config.h"
 #include <vector>
+#include <list>
 
 using namespace std;
 using namespace sf;
 
 struct pieces {
-	RectangleShape *rectangle;
 	RenderWindow *window;
-	RectangleShape *firstPieces;
-	RectangleShape *secondPieces;
-	RectangleShape *thirdPieces;
-	RectangleShape *fourthPieces;
-	RectangleShape *fifthPieces;
 	unsigned int step = 1;
+	list<RectangleShape*> listPieces;
+	list<RectangleShape*>::iterator itPieces;
 	int i = 0;
 	bool determineReductionFactor = true;
 	float reductionFactor;
@@ -22,6 +19,7 @@ struct pieces {
 	unsigned int distanceBetweenFigures;
 	float capacity = 1.0f;
 	bool useBreakpoint = true;
+	float count = 0;
 	
 };
 
